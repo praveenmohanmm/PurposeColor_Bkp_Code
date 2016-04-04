@@ -67,6 +67,7 @@ namespace PurposeColor.screens
     public class MenuPage : ContentPage
     {
         ListView listView;
+		PurposeColorTitleBar mainTitleBar = null;
         public MenuPage()
         {
             this.BackgroundColor = Color.White;
@@ -76,8 +77,9 @@ namespace PurposeColor.screens
             //IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
             double screenWidth = App.screenWidth;
             double screenHeight = App.screenHeight;
-            PurposeColorTitleBar titleBar = new PurposeColorTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back");
+            //PurposeColorTitleBar titleBar = new PurposeColorTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back");
 
+			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
             List<MenuItems> menuItems = new List<MenuItems>();
 			User user = null;
             try
@@ -159,12 +161,21 @@ namespace PurposeColor.screens
             masterLayout.BackgroundColor = Constants.MENU_BG_COLOR;
 
 
+			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
            // masterLayout.AddChildToLayout(titleBar, 0, 0);
-            masterLayout.AddChildToLayout(listView, 0, 6);
-            this.TranslationY = screenHeight * 10 / 100;
+			Button btn  = new Button{Text = "Close", TextColor = Color.Red, BackgroundColor = Color.Yellow};
+			//masterLayout.AddChildToLayout(btn, 0, 1);//(float)(App.screenWidth * .30), (float)(App.screenHeight * .5));
+			masterLayout.AddChildToLayout(listView, 0, 15);
+			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
+
+           // this.TranslationY = screenHeight * 10 / 100;
             Content = masterLayout;
         }
 
+		void imageAreaTapGestureRecognizer_Tapped(object sender, System.EventArgs e)
+		{
+			App.masterPage.IsPresented = !App.masterPage.IsPresented;
+		}
 
         public void Dispose()
         {
